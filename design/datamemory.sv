@@ -38,26 +38,22 @@ module datamemory #(
       case (Funct3)
         3'b010: rd <= Dataout; //LW
         3'b000: begin          //LB (SIGNED)
-          logic [7:0] byte;
-          case(a[1:0]) // Checks which specific address is required to be outputed, because the addresses (and therefore, the read addresses) are organized into words (4 bytes)
-            2'b00: byte = Dataout[7:0];   // Number divisible by 4
-            2'b01: byte = Dataout[15:8];  // Offset of 1 from a number divisible by 4
-            2'b10: byte = Dataout[23:16]; // Offset of 2 from a number divisible by 4
-            2'b11: byte = Dataout[31:24]; // Offset of 3 from a number divisible by 4
+          case(a[1:0])                                          // Checks which specific address is required to be outputed, because the addresses (and therefore, the read addresses) are organized into words (4 bytes)
+            2'b00: rd <= {{24{Dataout[7]}}, Dataout[7:0]};      // Number divisible by 4
+            2'b01: rd <= {{24{Dataout[15]}}, Dataout[15:8]};    // Offset of 1 from a number divisible by 4
+            2'b10: rd <= {{24{Dataout[23]}}, Dataout[23:16]};   // Offset of 2 from a number divisible by 4
+            2'b11: rd <= {{24{Dataout[31]}}, Dataout[31:24]};   // Offset of 3 from a number divisible by 4
           endcase
-          rd <= {{24{byte[7]}}, byte}; // Extends chosen byte (from word) to 32-bits (extends de sign bit)
         end
         3'b100: begin         //LBU (UNSIGNED)
-          logic [7:0] byte;
-          case(a[1:0]) // Logic similar to LB
-            2'b00: byte = Dataout[7:0];
-            2'b01: byte = Dataout[15:8];
-            2'b10: byte = Dataout[23:16];
-            2'b11: byte = Dataout[31:24];
+          case(a[1:0])                                          // Logic similar to LB
+            2'b00: rd <= {{24{1'b0}}, Dataout[7:0]};
+            2'b01: rd <= {{24{1'b0}}, Dataout[15:8]};
+            2'b10: rd <= {{24{1'b0}}, Dataout[23:16]};
+            2'b11: rd <= {{24{1'b0}}, Dataout[31:24]};
           endcase
-          rd <= {{24{1'b0}}, byte}; // Extends chosen byte (from word) to 32-bits (insert zero to the rest of the bits to the left)
         end
-      default: rd <= Dataout;
+        default: rd <= Dataout;
       endcase
     end else if (MemWrite) begin
       case (Funct3)
