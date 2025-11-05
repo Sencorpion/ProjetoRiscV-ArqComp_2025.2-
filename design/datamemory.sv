@@ -37,6 +37,13 @@ module datamemory #(
     if (MemRead) begin
       case (Funct3)
         3'b010:  //LW
+        3'b001: begin //LH
+          case(a[1:0])// Checa o alinhamento de meia palavra
+            2'b00: rd <= {{16{Dataout[15]}}, Dataout[15:0]}; // Endereço Par: lê Dataout[15:0] e estende o bit 15
+            2'b10: rd <= {{16{Dataout[31]}}, Dataout[31:16]}; // Endereço Par+2: lê Dataout[31:16] e estende o bit 31
+            default: rd <= 32'hxxxx;  // Sinaliza desalinhamento (ou exceção)
+          endcase
+        end
         rd <= Dataout;
         default: rd <= Dataout;
       endcase
@@ -55,3 +62,4 @@ module datamemory #(
   end
 
 endmodule
+
