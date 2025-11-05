@@ -36,8 +36,23 @@ module datamemory #(
 
     if (MemRead) begin
       case (Funct3)
-        3'b010:  //LW
-        rd <= Dataout;
+        3'b010: rd <= Dataout; //LW
+        3'b000: begin          //LB (SIGNED)
+          case(a[1:0])                                          // Checks which specific address is required to be outputed, because the addresses (and therefore, the read addresses) are organized into words (4 bytes)
+            2'b00: rd <= {{24{Dataout[7]}}, Dataout[7:0]};      // Number divisible by 4
+            2'b01: rd <= {{24{Dataout[15]}}, Dataout[15:8]};    // Offset of 1 from a number divisible by 4
+            2'b10: rd <= {{24{Dataout[23]}}, Dataout[23:16]};   // Offset of 2 from a number divisible by 4
+            2'b11: rd <= {{24{Dataout[31]}}, Dataout[31:24]};   // Offset of 3 from a number divisible by 4
+          endcase
+        end
+        3'b100: begin         //LBU (UNSIGNED)
+          case(a[1:0])                                          // Logic similar to LB
+            2'b00: rd <= {{24{1'b0}}, Dataout[7:0]};
+            2'b01: rd <= {{24{1'b0}}, Dataout[15:8]};
+            2'b10: rd <= {{24{1'b0}}, Dataout[23:16]};
+            2'b11: rd <= {{24{1'b0}}, Dataout[31:24]};
+          endcase
+        end
         default: rd <= Dataout;
       endcase
     end else if (MemWrite) begin
