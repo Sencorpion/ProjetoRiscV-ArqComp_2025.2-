@@ -36,6 +36,14 @@ module datamemory #(
 
     if (MemRead) begin
       case (Funct3)
+        3'b001: begin //LH
+          case(a[1:0])// Checa o alinhamento de meia palavra
+            2'b00: rd <= {{16{Dataout[15]}}, Dataout[15:0]}; // Endereço Par: lê Dataout[15:0] e estende o bit 15
+            2'b10: rd <= {{16{Dataout[31]}}, Dataout[31:16]}; // Endereço Par+2: lê Dataout[31:16] e estende o bit 31
+            default: rd <= 32'hxxxx;  // Sinaliza desalinhamento (ou exceção)
+          endcase
+        end
+        rd <= Dataout;
         3'b010: rd <= Dataout; //LW
         3'b000: begin          //LB (SIGNED)
           case(a[1:0])                                          // Checks which specific address is required to be outputed, because the addresses (and therefore, the read addresses) are organized into words (4 bytes)
@@ -102,3 +110,4 @@ module datamemory #(
   end
 
 endmodule
+
