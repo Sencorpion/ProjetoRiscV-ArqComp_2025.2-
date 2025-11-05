@@ -36,7 +36,6 @@ module datamemory #(
 
     if (MemRead) begin
       case (Funct3)
-        3'b010:  //LW
         3'b001: begin //LH
           case(a[1:0])// Checa o alinhamento de meia palavra
             2'b00: rd <= {{16{Dataout[15]}}, Dataout[15:0]}; // Endereço Par: lê Dataout[15:0] e estende o bit 15
@@ -45,6 +44,23 @@ module datamemory #(
           endcase
         end
         rd <= Dataout;
+        3'b010: rd <= Dataout; //LW
+        3'b000: begin          //LB (SIGNED)
+          case(a[1:0])                                          // Checks which specific address is required to be outputed, because the addresses (and therefore, the read addresses) are organized into words (4 bytes)
+            2'b00: rd <= {{24{Dataout[7]}}, Dataout[7:0]};      // Number divisible by 4
+            2'b01: rd <= {{24{Dataout[15]}}, Dataout[15:8]};    // Offset of 1 from a number divisible by 4
+            2'b10: rd <= {{24{Dataout[23]}}, Dataout[23:16]};   // Offset of 2 from a number divisible by 4
+            2'b11: rd <= {{24{Dataout[31]}}, Dataout[31:24]};   // Offset of 3 from a number divisible by 4
+          endcase
+        end
+        3'b100: begin         //LBU (UNSIGNED)
+          case(a[1:0])                                          // Logic similar to LB
+            2'b00: rd <= {{24{1'b0}}, Dataout[7:0]};
+            2'b01: rd <= {{24{1'b0}}, Dataout[15:8]};
+            2'b10: rd <= {{24{1'b0}}, Dataout[23:16]};
+            2'b11: rd <= {{24{1'b0}}, Dataout[31:24]};
+          endcase
+        end
         default: rd <= Dataout;
       endcase
     end else if (MemWrite) begin
@@ -52,6 +68,38 @@ module datamemory #(
         3'b010: begin  //SW
           Wr <= 4'b1111;
           Datain <= wd;
+        end
+        3'b001: begin  //SH
+          case(a[1])
+            1'b0: begin
+              Wr <= 4'b0011;
+              Datain <= {16'b0, wd[15:0]};
+            end
+            1'b1: begin
+              Wr <= 4'b1100;
+              Datain <= {wd[15:0], 16'b0};
+            end 
+          endcase
+        end
+        3'b000: begin //SB
+          case(a[1:0])
+            2'b00: begin
+              Wr <= 4'b0001;
+              Datain <= {24'b0, wd[7:0]};
+            end
+            2'b01: begin
+              Wr <= 4'b0010;
+              Datain <= {16'b0, wd[7:0], 8'b0};
+            end
+            2'b10: begin
+              Wr <= 4'b0100;
+              Datain <= {8'b0, wd[7:0], 16'b0};
+            end
+            2'b11: begin
+              Wr <= 4'b1000;
+              Datain <= {wd[7:0], 24'b0};
+            end 
+          endcase
         end
         default: begin
           Wr <= 4'b1111;
