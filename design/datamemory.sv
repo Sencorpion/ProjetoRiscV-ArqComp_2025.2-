@@ -61,6 +61,38 @@ module datamemory #(
           Wr <= 4'b1111;
           Datain <= wd;
         end
+        3'b001: begin  //SH
+          case(a[1])
+            1'b0: begin
+              Wr <= 4'b0011;
+              Datain <= {16'b0, wd[15:0]};
+            end
+            1'b1: begin
+              Wr <= 4'b1100;
+              Datain <= {wd[15:0], 16'b0};
+            end 
+          endcase
+        end
+        3'b000: begin //SB
+          case(a[1:0])
+            2'b00: begin
+              Wr <= 4'b0001;
+              Datain <= {24'b0, wd[7:0]};
+            end
+            2'b01: begin
+              Wr <= 4'b0010;
+              Datain <= {16'b0, wd[7:0], 8'b0};
+            end
+            2'b10: begin
+              Wr <= 4'b0100;
+              Datain <= {8'b0, wd[7:0], 16'b0};
+            end
+            2'b11: begin
+              Wr <= 4'b1000;
+              Datain <= {wd[7:0], 24'b0};
+            end 
+          endcase
+        end
         default: begin
           Wr <= 4'b1111;
           Datain <= wd;
