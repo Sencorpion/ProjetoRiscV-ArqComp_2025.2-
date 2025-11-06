@@ -28,6 +28,5 @@ module ALUController (
       ((ALUOp == 2'b10) && (Funct3 == 3'b001)) ||  // R\I-<<
       ((ALUOp == 2'b10) && (Funct3 == 3'b010));  // R\I-<
 
-  assign Operation[3] = (ALUOp == 2'b01) ||  // BEQ
-      ((ALUOp == 2'b10) && (Funct3 == 3'b010));  // R\I-<
+  assign Operation[3] = (ALUOp == 2'b01); // BEQ
 endmodule
