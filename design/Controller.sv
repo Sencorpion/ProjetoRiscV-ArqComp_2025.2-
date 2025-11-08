@@ -21,9 +21,9 @@ module Controller (
 
   logic [6:0] R_TYPE, LW, SW, BR;
 
-  assign R_TYPE = 7'b0110011;  //add,and
-  assign LW = 7'b0000011;  //lw
-  assign SW = 7'b0100011;  //sw
+  assign R_TYPE = 7'b0110011;  //add,and,sub,slt,xor,or
+  assign LW = 7'b0000011;  //lw,lh,lb,lbu
+  assign SW = 7'b0100011;  //sw,sh,sbu
   assign BR = 7'b1100011;  //beq
 
   assign ALUSrc = (Opcode == LW || Opcode == SW);
