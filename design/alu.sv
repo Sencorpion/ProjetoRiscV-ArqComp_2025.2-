@@ -26,9 +26,9 @@ module alu#(
             4'b1000:        // Equal
                     ALUResult = (SrcA == SrcB) ? 1 : 0;
             4'b0100:        // SUB
-		    ALUResult = SrcA - SrcB;
-	    4'b0101:        // SLT
-		    ALUResult = (SrcA < SrcB) ? 1 : 0;
+		    		ALUResult = SrcA - SrcB;
+	    	4'b0101:        // SLT
+		    		ALUResult = (SrcA < SrcB) ? 1 : 0;
             4'b0110:        // SLLI (Shift Left Logical)
                     ALUResult = SrcA << SrcB[4:0];
             4'b0111:        // SRLI (Shift Right Logical)
