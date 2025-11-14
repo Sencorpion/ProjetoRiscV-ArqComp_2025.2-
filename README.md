@@ -22,8 +22,8 @@ Seu objetivo é implementar as instruções restantes listadas abaixo:
 
 | # | Instrução | Implementada | Testada | Funcionando |
 |---|-----------|:-----------:|:-------:|:-----------:|
-| 1  | `JAL`     |      ❌     |    ❌    |      ❌      |
-| 2  | `JALR`    |      ❌     |    ❌    |      ❌      |
+| 1  | `JAL`     |      ✅     |    ❌    |      ❌      |
+| 2  | `JALR`    |      ✅     |    ❌    |      ❌      |
 | 3  | `BNE`     |      ❌     |    ❌    |      ❌      |
 | 4  | `BLT`     |      ❌     |    ❌    |      ❌      |
 | 5  | `BGE`     |      ❌     |    ❌    |      ❌      |
@@ -112,3 +112,4 @@ Existem duas maneiras de nos enviar suas sugestões:
 1. **Issue**: Abra uma issue detalhando o problema ou a melhoria proposta. Certifique-se de fornecer informações claras e específicas para facilitar a compreensão do que precisa ser corrigido ou aprimorado.
 
 2. **Pull Request**: Se você é familiarizado com o processo de pull requests, sinta-se à vontade para enviar suas alterações diretamente por meio de um pull request. Certifique-se de descrever claramente as alterações realizadas e o motivo por trás delas.
+
