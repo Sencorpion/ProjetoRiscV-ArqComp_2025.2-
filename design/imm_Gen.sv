@@ -33,7 +33,7 @@ module imm_Gen (
           inst_code[20],       // IMM[11]
           inst_code[30:21],    // IMM[10:1]
           1'b0                 // IMM[0]
-          }
+          };
 
       default: Imm_out = {32'b0};
 

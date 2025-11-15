@@ -17,6 +17,8 @@ module Datapath #(
     MemWrite,  // Register file or Immediate MUX // Memroy Writing Enable
     MemRead,   // Memroy Reading Enable
     Branch,    // Branch Enable
+    Jump,       // Jump flag
+    JumpR,      // Jump with Register flag
     input logic  [          1:0] MemtoReg,       // Register file writing enable   // Memory or ALU MUX
     input  logic [          1:0] ALUOp,
     input  logic [ALU_CC_W -1:0] ALU_CC,         // ALU Control Code ( input of the ALU )
@@ -51,8 +53,6 @@ module Datapath #(
   logic [DATA_W-1:0] FAmux_Result;
   logic [DATA_W-1:0] FBmux_Result;
   logic Reg_Stall;  //1: PC fetch same, Register not update
-  logic Jump;       // Jump flag
-  logic JumpR;      // Jump with Register flag
 
   if_id_reg A;
   id_ex_reg B;
