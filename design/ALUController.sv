@@ -1,17 +1,48 @@
 `timescale 1ns / 1ps
 
-module ALUController (
-    //Inputs
-    input logic [1:0] ALUOp,  // 2-bit opcode field from the Controller--00: LW/SW/AUIPC; 01:Branch; 10: Rtype; 11:Itype
-    input logic [6:0] Funct7,  // bits 25 to 31 of the instruction
-    input logic [2:0] Funct3,  // bits 12 to 14 of the instruction
+/*
+* ALU CONTROL UNIT
+* Description: Acts as the sub-controller for the ALU. It translates a 2-bit
+*              high-level ALU Operation (ALUOp) code from the Controller ,
+*              along with specific instruction fields (Funct3, Funct7), into
+*              a 4-bit operation code (Operation) that directly tells the
+*              ALU which function to perform.
+*/
 
-    //Output
-    output logic [3:0] Operation  // operation selection for ALU
+module ALUController (
+
+    // INPUTS
+    // ALUOp: A 2-bit control signal from the Controller. It indicates the
+    //        type of ALU operation required by the current instruction.
+    //        - 2'b00: LOAD/STORE     - Requires ADD for address calculation
+    //        - 2'b01: BRANCH         - Requires comparison checks (equal, less
+    //                                  than, etc)
+    //        - 2'b10  REGISTER TYPE  - Requires Funct3 and Funct7 for specific
+    //                                  operations between registers
+    //        - 2'b11  IMMEDIATE TYPE - Requires Funct3 and (very, very rarely) Funct7 for specific
+    //                                  operations between a register and
+    //                                  a fixed, immediate value
+    input logic [1:0] ALUOp,
+
+    // Funct7: Bits[31:25] of the instruction. Used primarily for R-Type
+    //         instructions, and occasionally for I-Type instruction (mostly
+    //         shift operations) to differentiate instructions with the exact
+    //         Funct3 code.
+    input logic [6:0] Funct7,
+
+    // Funct3: Bits[14:12] of the instruction. Used for R-Type and I-Type
+    //         instructions to specific the required ALU operation.
+    input logic [2:0] Funct3,
+
+    // OUTPUTS
+    // Operation: A 4-bit control signal that directly selects the function to
+    //            be performed by the ALU. The encoding depends on how the ALU
+    //            module interprets the data.
+    output logic [3:0] Operation
 );
 always_comb begin
     case (ALUOp)
-      2'b00: // LW || SW
+      2'b00: // STORE || LOAD
         Operation = 4'b0010; // (DOES ADD)
 
       2'b01: // BRANCH
@@ -34,7 +65,7 @@ always_comb begin
           3'b101: Operation = (Funct7 == 7'b0100000) ? 4'b1001 : 4'b0111; // SRAI || SRLI
           default: Operation = 4'bxxxx;
         endcase
-      default: Operation = 4'bxxxx;
+      default: Operation = 4'bxxxx; // Default to an undefined state to catch unhandled cases.
     endcase
   end
 
