@@ -15,7 +15,12 @@ always_comb begin
         Operation = 4'b0010; // (DOES ADD)
 
       2'b01: // BRANCH
-        Operation = 4'b1000; // BEQ
+        case (Funct3)
+          3'b000: Operation = 4'b1000; // BEQ
+          3'b100: Operation = 4'b0101; // BLT
+          3'b101: Operation = 4'b1010; // BGE
+          default: Operation = 4'bxxxx;
+        endcase
 
       2'b10: // REGISTER TYPE
         case (Funct3)
