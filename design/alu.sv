@@ -35,8 +35,12 @@ module alu#(
                     ALUResult = (SrcA == SrcB) ? 1 : 0;
             4'b1001:        // SRAI
                     ALUResult = $signed(SrcA) >>> SrcB[4:0];
+
+            4'b1100:        //BNE 
+                    ALUResult = (SrcA != SrcB) ? 1 : 0;
+
             4'b1010:        // BGE
-		    ALUResult = ($signed(SrcA) >= $signed(SrcB)) ? 1 : 0;
+		                ALUResult = ($signed(SrcA) >= $signed(SrcB)) ? 1 : 0;
             default:
                     ALUResult = 0;
             endcase

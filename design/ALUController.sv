@@ -17,6 +17,7 @@ always_comb begin
       2'b01: // BRANCH
         case (Funct3)
           3'b000: Operation = 4'b1000; // BEQ
+          3'b001: Operation = 4'b1100; // BNE alteracao
           3'b100: Operation = 4'b0101; // BLT
           3'b101: Operation = 4'b1010; // BGE
           default: Operation = 4'bxxxx;
