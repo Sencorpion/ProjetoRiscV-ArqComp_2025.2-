@@ -54,6 +54,7 @@ module Datapath #(
   logic [DATA_W-1:0] FAmux_Result;
   logic [DATA_W-1:0] FBmux_Result;
   logic Reg_Stall;  //1: PC fetch same, Register not update
+  logic Pc_stall;
  
 
   if_id_reg A;
@@ -67,17 +68,19 @@ module Datapath #(
       9'b100,
       PCPlus4
   );
+    
   mux2 #(9) pcmux (
       PCPlus4,
       BrPC[PC_W-1:0],
       PcSel,
       Next_PC
   );
+
   flopr #(9) pcreg (
       clk,
       reset,
       Next_PC,
-      Halt,
+      Pc_stall,
       PC
   );
   instructionmemory instr_mem (
@@ -288,6 +291,8 @@ module Datapath #(
   assign wr_data = C.RD_Two;
   assign rd_data = ReadData;
 
+  assign Pc_stall = Halt | Reg_Stall;
+
   // MEM_WB_Reg D;
   always @(posedge clk) begin
     if (reset)   // initialization
@@ -326,5 +331,6 @@ module Datapath #(
   assign WB_Data = WrmuxSrc;
 
 endmodule
+
 
 
