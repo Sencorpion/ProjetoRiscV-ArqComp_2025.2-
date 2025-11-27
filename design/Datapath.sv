@@ -54,7 +54,7 @@ module Datapath #(
   logic [DATA_W-1:0] FAmux_Result;
   logic [DATA_W-1:0] FBmux_Result;
   logic Reg_Stall;  //1: PC fetch same, Register not update
-  logic Pc_stall;
+
  
 
   if_id_reg A;
@@ -80,7 +80,7 @@ module Datapath #(
       clk,
       reset,
       Next_PC,
-      Pc_stall,
+      Reg_Stall,
       PC
   );
   instructionmemory instr_mem (
@@ -150,6 +150,7 @@ module Datapath #(
       B.Branch <= 0;
       B.Jump <= 0;
       B.JumpR <= 0;
+      B.Halt <= 0;
       B.Curr_Pc <= 0;
       B.RD_One <= 0;
       B.RD_Two <= 0;
@@ -170,6 +171,7 @@ module Datapath #(
       B.Branch <= Branch;
       B.Jump <= Jump;
       B.JumpR <= JumpR;
+      B.Halt <= Halt;
       B.Curr_Pc <= A.Curr_Pc;
       B.RD_One <= Reg1;
       B.RD_Two <= Reg2;
@@ -234,6 +236,7 @@ module Datapath #(
       B.Branch,
       B.Jump,
       B.JumpR,
+      B.Halt,
       ALUResult,
       BrImm,
       Old_PC_Four,
@@ -290,8 +293,6 @@ module Datapath #(
   assign addr = C.Alu_Result[8:0];
   assign wr_data = C.RD_Two;
   assign rd_data = ReadData;
-
-  assign Pc_stall = Halt | Reg_Stall;
 
   // MEM_WB_Reg D;
   always @(posedge clk) begin
