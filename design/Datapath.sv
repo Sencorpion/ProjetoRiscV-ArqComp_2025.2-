@@ -54,8 +54,7 @@ module Datapath #(
   logic [DATA_W-1:0] FAmux_Result;
   logic [DATA_W-1:0] FBmux_Result;
   logic Reg_Stall;  //1: PC fetch same, Register not update
-  Logic Pc_Stall;
-  assign PC_Stall = Halt;
+ 
 
   if_id_reg A;
   id_ex_reg B;
@@ -78,7 +77,7 @@ module Datapath #(
       clk,
       reset,
       Next_PC,
-      PC_Stall,
+      Halt,
       PC
   );
   instructionmemory instr_mem (
@@ -327,4 +326,5 @@ module Datapath #(
   assign WB_Data = WrmuxSrc;
 
 endmodule
+
 
