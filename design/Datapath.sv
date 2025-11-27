@@ -55,7 +55,7 @@ module Datapath #(
   logic [DATA_W-1:0] FBmux_Result;
   logic Reg_Stall;  //1: PC fetch same, Register not update
   Logic Pc_Stall;
-  assign PC_Stall = Reg_Stall || Halt;
+  assign PC_Stall = Halt;
 
   if_id_reg A;
   id_ex_reg B;
@@ -137,7 +137,7 @@ module Datapath #(
 
   // ID_EX_Reg B;
   always @(posedge clk) begin
-    if ((reset) || (Reg_Stall) || (PcSel) || (Halt))   // initialization or flush or generate a NOP if hazard
+    if ((reset) || (Reg_Stall) || (PcSel))   // initialization or flush or generate a NOP if hazard
         begin
       B.ALUSrc <= 0;
       B.MemtoReg <= 2'b00;
@@ -327,3 +327,4 @@ module Datapath #(
   assign WB_Data = WrmuxSrc;
 
 endmodule
+
