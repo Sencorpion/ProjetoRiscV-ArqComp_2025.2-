@@ -19,7 +19,8 @@ module Controller (
     output logic [1:0] ALUOp,   // 00: LW/SW; 01:Branch; 10: Rtype; 11 Itype
     output logic Branch,        // 0: branch is not taken; 1: branch is taken
     output logic Jump,          //
-    output logic JumpR          //
+    output logic JumpR,          //
+    output logic halt
 );
 
   logic [6:0] R_TYPE, LW, SW, BR, IMM, JAL, JALR;
@@ -31,6 +32,7 @@ module Controller (
   assign IMM = 7'b0010011;     // addi, slti, slli, srli, srai
   assign JAL = 7'b1101111;     // jal
   assign JALR = 7'b1100111;    // jalr
+  assign HALT = 7'b1111111;    // halt
 
   assign ALUSrc = (Opcode == LW || Opcode == SW || Opcode == IMM || Opcode == JALR);
   assign MemtoReg = (Opcode == LW) ? 2'b01 : (Opcode == JAL || Opcode == JALR) ? 2'b10 : 2'b00;
@@ -42,4 +44,5 @@ module Controller (
   assign Branch = (Opcode == BR);
   assign Jump = (Opcode == JAL);
   assign JumpR = (Opcode == JALR);
+  assign halt = (Opcode == HALT); 
 endmodule

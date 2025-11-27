@@ -19,6 +19,7 @@ module Datapath #(
     Branch,    // Branch Enable
     Jump,       // Jump flag
     JumpR,      // Jump with Register flag
+    Halt,      // Halt the program
     input logic  [          1:0] MemtoReg,       // Register file writing enable   // Memory or ALU MUX
     input  logic [          1:0] ALUOp,
     input  logic [ALU_CC_W -1:0] ALU_CC,         // ALU Control Code ( input of the ALU )
@@ -53,6 +54,7 @@ module Datapath #(
   logic [DATA_W-1:0] FAmux_Result;
   logic [DATA_W-1:0] FBmux_Result;
   logic Reg_Stall;  //1: PC fetch same, Register not update
+ 
 
   if_id_reg A;
   id_ex_reg B;
@@ -75,7 +77,7 @@ module Datapath #(
       clk,
       reset,
       Next_PC,
-      Reg_Stall,
+      Halt,
       PC
   );
   instructionmemory instr_mem (
@@ -324,3 +326,5 @@ module Datapath #(
   assign WB_Data = WrmuxSrc;
 
 endmodule
+
+
