@@ -20,6 +20,7 @@ module Datapath #(
     Jump,       // Jump flag
     JumpR,      // Jump with Register flag
     Halt,      // Halt the program
+    
     input logic  [          1:0] MemtoReg,       // Register file writing enable   // Memory or ALU MUX
     input  logic [          1:0] ALUOp,
     input  logic [ALU_CC_W -1:0] ALU_CC,         // ALU Control Code ( input of the ALU )
