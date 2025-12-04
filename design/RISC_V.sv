@@ -2,9 +2,11 @@
 
 module riscv #(
     parameter DATA_W = 32
-) (
+    ) (
+
     input logic clk,
     reset,  // clock and reset signals
+
     output logic [31:0] WB_Data,  // The ALU_Result
 
     output logic [4:0] reg_num,
@@ -16,6 +18,7 @@ module riscv #(
     output logic [8:0] addr,
     output logic [DATA_W-1:0] wr_data,
     output logic [DATA_W-1:0] rd_data
+
 );
 
   logic [6:0] opcode;

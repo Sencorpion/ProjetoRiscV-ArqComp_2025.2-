@@ -1,6 +1,7 @@
 `timescale 1ns / 1ps
 
 module ALUController (
+  
     //Inputs
     input logic [1:0] ALUOp,  // 2-bit opcode field from the Controller--00: LW/SW/AUIPC; 01:Branch; 10: Rtype; 11:Itype
     input logic [6:0] Funct7,  // bits 25 to 31 of the instruction
@@ -8,8 +9,10 @@ module ALUController (
 
     //Output
     output logic [3:0] Operation  // operation selection for ALU
+
 );
 always_comb begin
+
     case (ALUOp)
       2'b00: // LW || SW
         Operation = 4'b0010; // (DOES ADD)
