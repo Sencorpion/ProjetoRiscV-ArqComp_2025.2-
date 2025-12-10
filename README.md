@@ -1,6 +1,6 @@
 # CIN0011 - Organização e Arquitetura de Computadores e CIN0012 - Laboratório de Organização e Arquitetura de Computadores
 
-LINK PARA O RELATÓRIO: https://docs.google.com/document/d/1h4qNkyBlZxHZCSQBpFHm6BFxqVqkE7hktH4eQz0_6Hs/edit?usp=sharing
+LINK PARA O RELATÓRIO: https://docs.google.com/document/d/1rrbM4_xEh0wyHRw_mnAdFSwzxW5OjI5EuW-3REsp2zs/edit?tab=t.0
 
 # 🚀 Projeto RISC-V Pipelined 🚀
 
@@ -114,6 +114,7 @@ Existem duas maneiras de nos enviar suas sugestões:
 1. **Issue**: Abra uma issue detalhando o problema ou a melhoria proposta. Certifique-se de fornecer informações claras e específicas para facilitar a compreensão do que precisa ser corrigido ou aprimorado.
 
 2. **Pull Request**: Se você é familiarizado com o processo de pull requests, sinta-se à vontade para enviar suas alterações diretamente por meio de um pull request. Certifique-se de descrever claramente as alterações realizadas e o motivo por trás delas.
+
 
 
 
