@@ -9,6 +9,7 @@ module Controller (
     output logic ALUSrc,
     //0: The second ALU operand comes from the second register file output (Read data 2); 
     //1: The second ALU operand is the sign-extended, lower 16 bits of the instruction.
+    output logic PCtoALU, // 0 = Reg1; 1 = PC
     output logic [1:0] MemtoReg,
     //00: The value fed to the register Write data input comes from the ALU.
     //01: The value fed to the register Write data input comes from the data memory.
@@ -23,7 +24,7 @@ module Controller (
     output logic halt
 );
 
-  logic [6:0] R_TYPE, LW, SW, BR, IMM, JAL, JALR, HALT; //esse halt está marcado na história
+  logic [6:0] R_TYPE, LW, SW, BR, IMM, JAL, JALR, HALT;
 
   assign R_TYPE = 7'b0110011;  // add,and,sub,slt,xor,or
   assign LW = 7'b0000011;      // lw,lh,lb,lbu
@@ -33,10 +34,16 @@ module Controller (
   assign JAL = 7'b1101111;     // jal
   assign JALR = 7'b1100111;    // jalr
   assign HALT = 7'b1111111;    // halt
+  assign AUIPC = 7'b0010111;
+  assign LUI = 7'b0110111;
 
-  assign ALUSrc = (Opcode == LW || Opcode == SW || Opcode == IMM || Opcode == JALR);
-  assign MemtoReg = (Opcode == LW) ? 2'b01 : (Opcode == JAL || Opcode == JALR) ? 2'b10 : 2'b00;
-  assign RegWrite = (Opcode == R_TYPE || Opcode == LW || Opcode == IMM || Opcode == JAL || Opcode == JALR);
+  assign ALUSrc = (Opcode == LW || Opcode == SW || Opcode == IMM || Opcode == JALR || Opcode == AUIPC);
+  assign PCtoALU = (Opcode == AUIPC);
+  assign MemtoReg = (Opcode == LW) ? 2'b01 :
+                    (Opcode == JAL || Opcode == JALR) ? 2'b10 :
+                    (Opcode == LUI) ? 2'b11 :
+                    2'b00;
+  assign RegWrite = (Opcode == R_TYPE || Opcode == LW || Opcode == IMM || Opcode == JAL || Opcode == JALR || Opcode == AUIPC || Opcode == LUI);
   assign MemRead = (Opcode == LW);
   assign MemWrite = (Opcode == SW);
   assign ALUOp[0] = (Opcode == BR || Opcode == IMM || Opcode == JALR);
