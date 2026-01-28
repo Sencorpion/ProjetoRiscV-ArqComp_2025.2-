@@ -37,6 +37,9 @@ always_comb begin
           3'b000: Operation = 4'b0010;                                    // ADDI
           3'b001: Operation = 4'b0110;                                    // SLLI
           3'b010: Operation = 4'b0101;                                    // SLTI
+          3'b100: Operation = 4'b0011;                                    // XORI
+          3'b110: Operation = 4'b0001;                                    // ORI
+          3'b111: Operation = 4'b0000;                                    // ANDI
           3'b101: Operation = (Funct7 == 7'b0100000) ? 4'b1001 : 4'b0111; // SRAI || SRLI
           default: Operation = 4'bxxxx;
         endcase
