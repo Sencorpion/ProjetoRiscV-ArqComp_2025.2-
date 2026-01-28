@@ -43,6 +43,13 @@ module datamemory #(
             default: rd <= 32'hxxxx; 
           endcase
         end
+        3'b101: begin // LHU
+          case(a[1:0])
+            2'b00: rd <= {{16{1'b0}}, Dataout[15:0]};
+            2'b10: rd <= {{16{1'b0}}, Dataout[31:16]};
+            default: rd <= 32'hxxxx;
+          endcase
+        end
         3'b010: rd <= Dataout; //LW
         3'b000: begin          //LB (SIGNED)
           case(a[1:0])                                          // Checks which specific address is required to be outputed, because the addresses (and therefore, the read addresses) are organized into words (4 bytes)
