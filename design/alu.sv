@@ -41,6 +41,10 @@ module alu#(
 
             4'b1010:        // BGE
 		                ALUResult = ($signed(SrcA) >= $signed(SrcB)) ? 1 : 0;
+            4'b1011:        // BLTU
+                    ALUResult = (SrcA < SrcB) ? 1 : 0;
+            4'b1101:        // BGEU
+                    ALUResult = (SrcA >= SrcB) ? 1 : 0;
             default:
                     ALUResult = 0;
             endcase
