@@ -143,6 +143,7 @@ module Datapath #(
     if ((reset) || (Reg_Stall) || (PcSel))   // initialization or flush or generate a NOP if hazard
         begin
       B.ALUSrc <= 0;
+      B.PCtoALU <= 0;
       B.MemtoReg <= 2'b00;
       B.RegWrite <= 0;
       B.MemRead <= 0;
@@ -164,6 +165,7 @@ module Datapath #(
       B.Curr_Instr <= A.Curr_Instr;  //debug tmp
     end else begin
       B.ALUSrc <= ALUsrc;
+      B.PCtoALU <= PCtoALU;
       B.MemtoReg <= MemtoReg;
       B.RegWrite <= RegWrite;
       B.MemRead <= MemRead;
@@ -221,8 +223,8 @@ module Datapath #(
   );
   mux2 #(32) srcamux (
       FAmux_Result,
-      B.Curr_Pc,
-      PCtoALU,
+      {{23{1'b0}}, B.Curr_Pc},
+      B.PCtoALU,
       SrcA
   );
   mux2 #(32) srcbmux (

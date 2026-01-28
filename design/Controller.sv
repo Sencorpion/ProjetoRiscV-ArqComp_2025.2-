@@ -24,7 +24,7 @@ module Controller (
     output logic halt
 );
 
-  logic [6:0] R_TYPE, LW, SW, BR, IMM, JAL, JALR, HALT;
+  logic [6:0] R_TYPE, LW, SW, BR, IMM, JAL, JALR, HALT, AUIPC, LUI;
 
   assign R_TYPE = 7'b0110011;  // add,and,sub,slt,xor,or
   assign LW = 7'b0000011;      // lw,lh,lb,lbu
