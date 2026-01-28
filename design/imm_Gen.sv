@@ -16,6 +16,10 @@ module imm_Gen (
       7'b0100011:  // S-Type
       Imm_out = {inst_code[31] ? 20'hFFFFF : 20'b0, inst_code[31:25], inst_code[11:7]};
 
+      7'b0010111, // U-type AUIPC
+      7'b0110111: // U-type LUI
+      Imm_out = {inst_code[31:12], 12'b0};
+
       7'b1100011:  // B-Type
       Imm_out = {
         inst_code[31] ? 19'h7FFFF : 19'b0,

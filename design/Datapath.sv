@@ -12,6 +12,7 @@ module Datapath #(
 ) (
     input  logic                 clk,
     reset,
+    PCtoALU,
     RegWrite,
     ALUsrc,
     MemWrite,  // Register file or Immediate MUX // Memroy Writing Enable
@@ -45,7 +46,7 @@ module Datapath #(
   logic [INS_W-1:0] Instr;
   logic [DATA_W-1:0] Reg1, Reg2;
   logic [DATA_W-1:0] ReadData;
-  logic [DATA_W-1:0] SrcB, ALUResult;
+  logic [DATA_W-1:0] SrcA, SrcB, ALUResult;
   logic [DATA_W-1:0] ExtImm, BrImm, Old_PC_Four, BrPC;
   logic [DATA_W-1:0] WrmuxSrc;
   logic PcSel;  // mux select / flush signal
@@ -142,6 +143,7 @@ module Datapath #(
     if ((reset) || (Reg_Stall) || (PcSel))   // initialization or flush or generate a NOP if hazard
         begin
       B.ALUSrc <= 0;
+      B.PCtoALU <= 0;
       B.MemtoReg <= 2'b00;
       B.RegWrite <= 0;
       B.MemRead <= 0;
@@ -163,6 +165,7 @@ module Datapath #(
       B.Curr_Instr <= A.Curr_Instr;  //debug tmp
     end else begin
       B.ALUSrc <= ALUsrc;
+      B.PCtoALU <= PCtoALU;
       B.MemtoReg <= MemtoReg;
       B.RegWrite <= RegWrite;
       B.MemRead <= MemRead;
@@ -218,6 +221,12 @@ module Datapath #(
       FBmuxSel,
       FBmux_Result
   );
+  mux2 #(32) srcamux (
+      FAmux_Result,
+      {{23{1'b0}}, B.Curr_Pc},
+      B.PCtoALU,
+      SrcA
+  );
   mux2 #(32) srcbmux (
       FBmux_Result,
       B.ImmG,
@@ -225,7 +234,7 @@ module Datapath #(
       SrcB
   );
   alu alu_module (
-      FAmux_Result,
+      SrcA,
       SrcB,
       ALU_CC,
       ALUResult
@@ -324,7 +333,7 @@ module Datapath #(
       D.Alu_Result,
       D.MemReadData,
       D.Pc_Four,
-      32'hxxxxxxxx,
+      D.Imm_Out,
       D.MemtoReg,
       WrmuxSrc
   );
