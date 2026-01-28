@@ -20,6 +20,8 @@ always_comb begin
           3'b001: Operation = 4'b1100; // BNE alteracao
           3'b100: Operation = 4'b0101; // BLT
           3'b101: Operation = 4'b1010; // BGE
+          3'b110: Operation = 4'b1011; // BLTU
+          3'b111: Operation = 4'b1101; // BGEU
           default: Operation = 4'bxxxx;
         endcase
 
