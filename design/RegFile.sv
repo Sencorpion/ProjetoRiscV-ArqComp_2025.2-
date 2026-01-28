@@ -26,7 +26,7 @@ module RegFile #(
 
   always @(negedge clk) begin
     if (rst == 1'b1) for (i = 0; i < NUM_REGS; i = i + 1) register_file[i] <= 0;
-    else if (rst == 1'b0 && rg_wrt_en == 1'b1) begin
+    else if (rst == 1'b0 && rg_wrt_en == 1'b1 && rg_wrt_dest != 0) begin
       register_file[rg_wrt_dest] <= rg_wrt_data;
     end
   end

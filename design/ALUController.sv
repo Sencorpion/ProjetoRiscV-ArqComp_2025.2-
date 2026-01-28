@@ -28,9 +28,11 @@ always_comb begin
       2'b10: // REGISTER TYPE
         case (Funct3)
           3'b000: Operation = (Funct7 == 7'b0100000) ? 4'b0100 : 4'b0010; // SUB || ADD
+          3'b001: Operation = 4'b0110;                                    // SLL
           3'b010: Operation = 4'b0101;                                    // SLT
           3'b011: Operation = 4'b1011;                                    // SLTU
           3'b100: Operation = 4'b0011;                                    // XOR
+          3'b101: Operation = (Funct7 == 7'b0100000) ? 4'b1001 : 4'b0111; // SRA || SRL
           3'b110: Operation = 4'b0001;                                    // OR
           3'b111: Operation = 4'b0000;                                    // AND
           default: Operation = 4'bxxxx;
