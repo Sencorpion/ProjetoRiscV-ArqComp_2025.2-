@@ -27,6 +27,7 @@ always_comb begin
         case (Funct3)
           3'b000: Operation = (Funct7 == 7'b0100000) ? 4'b0100 : 4'b0010; // SUB || ADD
           3'b010: Operation = 4'b0101;                                    // SLT
+          3'b011: Operation = 4'b1011;                                    // SLTU
           3'b100: Operation = 4'b0011;                                    // XOR
           3'b110: Operation = 4'b0001;                                    // OR
           3'b111: Operation = 4'b0000;                                    // AND
@@ -37,6 +38,7 @@ always_comb begin
           3'b000: Operation = 4'b0010;                                    // ADDI
           3'b001: Operation = 4'b0110;                                    // SLLI
           3'b010: Operation = 4'b0101;                                    // SLTI
+          3'b011: Operation = 4'b1011;                                    // SLTIU
           3'b100: Operation = 4'b0011;                                    // XORI
           3'b110: Operation = 4'b0001;                                    // ORI
           3'b111: Operation = 4'b0000;                                    // ANDI
