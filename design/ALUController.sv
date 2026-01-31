@@ -2,16 +2,16 @@
 
 module ALUController (
     //Inputs
-    input logic [1:0] ALUOp,  // 2-bit opcode field from the Controller--00: LW/SW/AUIPC; 01:Branch; 10: Rtype; 11:Itype
-    input logic [6:0] Funct7,  // bits 25 to 31 of the instruction
-    input logic [2:0] Funct3,  // bits 12 to 14 of the instruction
+    input logic [1:0] ALUOp,   // 2-bit opcode field from the Controller -- 00: Load/Store/AUIPC; 01:Branch; 10: R-type; 11:I-type
+    input logic [6:0] Funct7,  // Bits 25 to 31 of the instruction
+    input logic [2:0] Funct3,  // Bits 12 to 14 of the instruction
 
     //Output
-    output logic [3:0] Operation  // operation selection for ALU
+    output logic [3:0] Operation  // Operation selection for ALU
 );
 always_comb begin
     case (ALUOp)
-      2'b00: // LW || SW
+      2'b00: // Load || Store || AUIPC
         Operation = 4'b0010; // (DOES ADD)
 
       2'b01: // BRANCH

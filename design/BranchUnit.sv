@@ -10,22 +10,27 @@ module BranchUnit #(
     input logic JumpR,
     input logic Halt,
     input logic [31:0] AluResult,
-    output logic [31:0] PC_Imm,
-    output logic [31:0] PC_Four,
+    output logic [31:0] PCplusImm,
+    output logic [31:0] PCplusFour,
     output logic [31:0] BrPC,
     output logic PcSel
 );
 
   logic Branch_Sel;
-  logic [31:0] PC_Full;
+  logic [31:0] PC_Extended;
 
-  assign PC_Full = {23'b0, Cur_PC};
+  assign PC_Extended = {23'b0, Cur_PC};
 
-  assign PC_Imm = PC_Full + Imm;
-  assign PC_Four = PC_Full + 32'b100;
-  assign Branch_Sel = Branch && AluResult[0];  // 0:Branch is taken; 1:Branch is not taken
+  assign PCplusImm = PC_Extended + Imm;
+  assign PCplusFour = PC_Extended + 32'b100;
 
-  assign BrPC = (Halt) ? PC_Full : (Branch_Sel || Jump) ? PC_Imm : (JumpR) ? {AluResult[31:1], 1'b0} : 32'b0;  // Branch or Jump -> PC+Imm   // JALR -> PC + EVEN AluResult // Otherwise, BrPc is unimportant
-  assign PcSel = Branch_Sel || Jump || JumpR || Halt;  // 1:branch is taken; 0:branch is not taken(choose pc+4)
+  assign Branch_Sel = Branch && AluResult[0];  // 0:Conditional Branch is not taken; 1:Conditional Branch is taken.
+
+  assign BrPC = (Halt) ? PC_Extended : (Branch_Sel || Jump) ? PCplusImm : (JumpR) ? {AluResult[31:1], 1'b0} : 32'b0;  
+  // Branch or Jump -> PC + Imm
+  // JALR -> RD1 value + Imm
+  // Halt -> PC
+
+  assign PcSel = Branch_Sel || Jump || JumpR || Halt;  // 0:Senquential PC (PC + 4); 1:Swerve from sequential flow.
 
 endmodule
